@@ -7,10 +7,10 @@
         <div th:replace="~{base :: title(value='My Orders')}"></div>
         <nav class="navbar navbar-expand navbar-light bg-light d-flex justify-content-between mb-3">
             <div class="navbar-nav">
-                <a class="nav-link active" href="">All</a>
-                <a class="nav-link" href="">Waiting</a>
-                <a class="nav-link" href="">Approved</a>
-                <a class="nav-link" href="">Delivered</a>
+                <a th:classappend="${status} == null ? 'active'" class="nav-link" href="/home">All</a>
+                <a class="nav-link" href="/home/waiting" th:classappend="${status} == 'waiting' ? 'active'">Waiting</a>
+                <a th:classappend="${status} == 'approved' ? 'active'" class="nav-link" href="/home/approved">Approved</a>
+                <a th:classappend="${status} == 'delivered' ? 'active'" class="nav-link" href="/home/delivered">Delivered</a>
             </div>
             <a href="/order/form" class="btn btn-outline-secondary my-2 my-sm-0">New</a>
         </nav>
@@ -27,8 +27,8 @@
                 <div class="row">
                     <div class="col-12 col-sm-8 mb-3">
                         <div class="row">
-                            <div class="col-md-5">Value: <span th:text="${order.transactionValue}">200.99</span></div>
-                            <div class="col-md-7">Delivery date: <span th:text="${order.deliveryDate}"></span></div>
+                            <div class="col-md-5">Value: <span th:if="${order.transactionValue != null}" th:text="${'R$' + #numbers.formatDecimal(order.transactionValue, 3, 'POINT', 2, 'COMMA')}">200.99</span></div>
+                            <div class="col-md-7">Delivery date: <span th:text="${#temporals.format(order.deliveryDate, 'dd/MM/yyyy')}"></span></div>
                         </div>
 
                         <div>Product</div>
