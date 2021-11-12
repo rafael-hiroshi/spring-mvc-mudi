@@ -5,7 +5,7 @@
     <div class="container">
         <div th:replace="~{base :: title(value='New Order')}"></div>
         <div class="card mt-3">
-            <form action="/order/register" class="card-body" method="POST"  th:object="${requestNewOrder}">
+            <form th:action="@{/order/register}" class="card-body" method="POST"  th:object="${requestNewOrder}">
                 <div class="form-group">
                     <label for="productName">Product</label>
                     <input class="form-control" placeholder="Product Name" th:field="*{productName}" th:errorclass="is-invalid"/>
