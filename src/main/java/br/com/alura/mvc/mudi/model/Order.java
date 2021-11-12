@@ -11,13 +11,17 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 300)
     private String productName;
     private BigDecimal transactionValue;
     private LocalDate deliveryDate;
+    @Column(length = 1000)
     private String productUrl;
+    @Column(length = 1000)
     private String imageUrl;
     private String description;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     public Long getId() {
         return id;
@@ -73,5 +77,13 @@ public class Order {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 }
