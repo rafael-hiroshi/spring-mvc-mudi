@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "`order`")
+@Table(name = "orders")
 public class Order {
 
     @Id
@@ -20,8 +20,12 @@ public class Order {
     @Column(length = 1000)
     private String imageUrl;
     private String description;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     public Long getId() {
         return id;
