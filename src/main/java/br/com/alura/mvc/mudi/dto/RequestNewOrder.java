@@ -2,6 +2,7 @@ package br.com.alura.mvc.mudi.dto;
 
 
 import br.com.alura.mvc.mudi.model.Order;
+import br.com.alura.mvc.mudi.model.OrderStatus;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -55,6 +56,7 @@ public class RequestNewOrder {
         order.setProductName(productName);
         order.setImageUrl(imageUrl);
         order.setProductUrl(productUrl);
+        order.setStatus(OrderStatus.WAITING);
         return order;
     }
 }

@@ -16,7 +16,13 @@
         </nav>
 
         <div class="card" th:each="order : ${orders}">
-            <div class="card-header" th:text="${order.productName}">Product name</div>
+
+            <th:block th:switch="${order.status.name()}">
+                <div th:case="'WAITING'" class="card-header alert-warning" th:text="${order.productName}">Product name</div>
+                <div th:case="'APPROVED'" class="card-header alert-success" th:text="${order.productName}">Product name</div>
+                <div th:case="'DELIVERED'" class="card-header alert-dark" th:text="${order.productName}">Product name</div>
+            </th:block>
+
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-sm-8 mb-3">
