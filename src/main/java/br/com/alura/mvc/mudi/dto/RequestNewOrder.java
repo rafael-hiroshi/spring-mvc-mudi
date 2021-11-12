@@ -3,18 +3,18 @@ package br.com.alura.mvc.mudi.dto;
 
 import br.com.alura.mvc.mudi.model.Order;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class RequestNewOrder {
 
-    @NotBlank @Min(5) @Max(30)
+    @NotBlank @Size(max = 300)
     private String productName;
-    @NotBlank
+    @NotBlank @Size(max = 1000)
     private String productUrl;
-    @NotBlank
+    @NotBlank @Size(max = 1000)
     private String imageUrl;
+    @Size(max = 255)
     private String description;
 
     public String getProductName() {
