@@ -5,12 +5,9 @@ import br.com.alura.mvc.mudi.model.OrderStatus;
 import br.com.alura.mvc.mudi.repository.OrderRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -25,21 +22,8 @@ public class HomeController {
 
     @GetMapping
     public String home(Model model) {
-        List<Order> orders = repository.findAll();
+        List<Order> orders = repository.findByStatus(OrderStatus.DELIVERED);
         model.addAttribute("orders", orders);
         return "home";
-    }
-
-    @GetMapping("/{status}")
-    public String byStatus(@PathVariable("status") String status, Model model) {
-        List<Order> orders = repository.findByStatus(OrderStatus.valueOf(status.toUpperCase()));
-        model.addAttribute("orders", orders);
-        model.addAttribute("status", status);
-        return "home";
-    }
-
-    @ExceptionHandler(value = IllegalArgumentException.class)
-    public String onError() {
-        return "redirect:/home";
     }
 }
