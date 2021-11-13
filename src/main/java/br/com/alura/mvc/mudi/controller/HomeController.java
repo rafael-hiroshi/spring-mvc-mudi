@@ -24,8 +24,8 @@ public class HomeController {
     }
 
     @GetMapping
-    public String home(Model model, Principal principal) {
-        List<Order> orders = repository.findAllByUser(principal.getName());
+    public String home(Model model) {
+        List<Order> orders = repository.findAll();
         model.addAttribute("orders", orders);
         return "home";
     }

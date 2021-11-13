@@ -27,15 +27,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/home", true)
+                .defaultSuccessUrl("/user/orders", true)
                 .permitAll()
             ).logout(logout -> logout.logoutUrl("/logout")).csrf().disable();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(encoder);
+        auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(new BCryptPasswordEncoder());
     }
 }
