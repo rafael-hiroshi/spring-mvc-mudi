@@ -3,6 +3,8 @@ package br.com.alura.mvc.mudi.controller;
 import br.com.alura.mvc.mudi.model.Order;
 import br.com.alura.mvc.mudi.model.OrderStatus;
 import br.com.alura.mvc.mudi.repository.OrderRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +24,10 @@ public class HomeController {
 
     @GetMapping
     public String home(Model model) {
-        List<Order> orders = repository.findByStatus(OrderStatus.DELIVERED);
+        Sort sort = Sort.by("deliveryDate").descending();
+        PageRequest paging = PageRequest.of(0, 10, sort);
+
+        List<Order> orders = repository.findByStatus(OrderStatus.DELIVERED, paging);
         model.addAttribute("orders", orders);
         return "home";
     }

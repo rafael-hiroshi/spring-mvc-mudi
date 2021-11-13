@@ -2,6 +2,8 @@ package br.com.alura.mvc.mudi.repository;
 
 import br.com.alura.mvc.mudi.model.Order;
 import br.com.alura.mvc.mudi.model.OrderStatus;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +13,9 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    List<Order> findByStatus(OrderStatus waiting);
+
+    @Cacheable("orders")
+    List<Order> findByStatus(OrderStatus waiting, Pageable sort);
 
     @Query("SELECT o FROM Order o JOIN o.user u WHERE u.username = :username")
     List<Order> findAllByUser(@Param("username") String username);
