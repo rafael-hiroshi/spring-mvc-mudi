@@ -5,6 +5,7 @@ import br.com.alura.mvc.mudi.model.Offer;
 import br.com.alura.mvc.mudi.model.Order;
 import br.com.alura.mvc.mudi.repository.OrderRepository;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +22,7 @@ public class OffersRest {
     }
 
     @PostMapping
-    public Offer store(RequestNewOffer request) {
+    public Offer store(@RequestBody RequestNewOffer request) {
         Optional<Order> orderFound = orderRepository.findById(request.getOrderId());
         if (!orderFound.isPresent()) {
             return null;

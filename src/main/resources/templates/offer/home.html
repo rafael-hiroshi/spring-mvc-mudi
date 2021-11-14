@@ -11,22 +11,26 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-sm-8 mb-3">
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <label>Value: <input type="text"></label>
-                                </div>
-                                <div class="col-md-7">
-                                    <label>Delivery date: <input type="text"></label>
-                                </div>
-                            </div>
-
                             <div>Product</div>
                             <div><a class="text-decoration-none" v-bind:href="order.productUrl">{{order.productName}}</a></div>
 
-                            <div>Description</div>
-                            <div>
-                                <textarea class="form-control">{{order.description}}</textarea>
+                            <div class="mt-3">Description</div>
+                            <textarea disabled="disabled" class="form-control mt-1">{{order.description}}</textarea>
+
+                            <div class="row mt-3">
+                                <div class="col-md-5">
+                                    <label>Value: <input type="text" class="form-control" v-model="order.transactionValue"></label>
+                                </div>
+                                <div class="col-md-7">
+                                    <label>Delivery date: <input type="text" class="form-control" v-model="order.deliveryDate"></label>
+                                </div>
                             </div>
+                            <div class="mt-2">
+                                <label for="order-comment">Comment</label>
+                                <textarea id="order-comment" class="form-control" v-model="order.comment"></textarea>
+                            </div>
+                            <button v-if="order.offerSent" class="mt-3 btn btn-success">Offer sent</button>
+                            <button v-else v-on:click="sendOffer(order)" class="mt-3 btn btn-primary">Offer</button>
                         </div>
                         <div class="col-12 col-sm-4">
                             <div>
@@ -47,7 +51,22 @@
                     mounted() {
                         axios
                             .get('http://localhost:8080/api/orders/waiting')
-                            .then(response => (this.orders = response.data))
+                            .then(response => {
+                                response.data.forEach(order => order.offerSent = false)
+                                this.orders = response.data;
+                            })
+                    },
+                    methods: {
+                        sendOffer: (order) => {
+                            axios
+                                .post('http://localhost:8080/api/offers', {
+                                    orderId: order.id,
+                                    value: order.transactionValue,
+                                    deliveryDate: order.deliveryDate,
+                                    comment: order.comment,
+                                })
+                                .then((response => order.offerSent = true));
+                        }
                     }
                 });
             }
