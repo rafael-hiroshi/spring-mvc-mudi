@@ -19,10 +19,18 @@
 
                             <div class="row mt-3">
                                 <div class="col-md-5">
-                                    <label>Value: <input type="text" class="form-control" v-model="order.transactionValue"></label>
+                                    <label for="transaction-value">Value:</label>
+                                    <input id="transaction-value" v-bind:class="{'is-invalid': order.errors.transactionValue !== ''}" type="text" class="form-control" v-model="order.transactionValue">
+                                    <div v-if="order.errors.transactionValue" class="invalid-feedback">
+                                        {{order.errors.transactionValue}}
+                                    </div>
                                 </div>
                                 <div class="col-md-7">
-                                    <label>Delivery date: <input type="text" class="form-control" v-model="order.deliveryDate"></label>
+                                    <label for="delivery-date">Delivery date:</label>
+                                    <input id="delivery-date" v-bind:class="{'is-invalid': order.errors.deliveryDate !== ''}" type="text" class="form-control" v-model="order.deliveryDate">
+                                    <div v-if="order.errors.deliveryDate" class="invalid-feedback">
+                                        {{order.errors.deliveryDate}}
+                                    </div>
                                 </div>
                             </div>
                             <div class="mt-2">
@@ -52,20 +60,35 @@
                         axios
                             .get('http://localhost:8080/api/orders/waiting')
                             .then(response => {
-                                response.data.forEach(order => order.offerSent = false)
+                                response.data.forEach(order => {
+                                    order.offerSent = false;
+                                    order.errors = {
+                                        transactionValue: '',
+                                        deliveryDate: ''
+                                    }
+                                })
                                 this.orders = response.data;
                             })
                     },
                     methods: {
                         sendOffer: (order) => {
+                            order.errors = {
+                                transactionValue: '',
+                                deliveryDate: ''
+                            };
                             axios
                                 .post('http://localhost:8080/api/offers', {
                                     orderId: order.id,
-                                    value: order.transactionValue,
+                                    transactionValue: order.transactionValue,
                                     deliveryDate: order.deliveryDate,
                                     comment: order.comment,
                                 })
-                                .then((response => order.offerSent = true));
+                                .then((response => order.offerSent = true))
+                                .catch(error => {
+                                    error.response.data.errors.forEach(error => {
+                                        order.errors[error.field] = error.defaultMessage;
+                                    });
+                                });
                         }
                     }
                 });

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -22,7 +23,7 @@ public class OffersRest {
     }
 
     @PostMapping
-    public Offer store(@RequestBody RequestNewOffer request) {
+    public Offer store(@Valid @RequestBody RequestNewOffer request) {
         Optional<Order> orderFound = orderRepository.findById(request.getOrderId());
         if (!orderFound.isPresent()) {
             return null;
